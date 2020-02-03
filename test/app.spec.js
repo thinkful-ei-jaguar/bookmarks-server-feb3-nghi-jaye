@@ -29,21 +29,21 @@ describe('App', () => {
     beforeEach('Insert data', () => db.insert(testBookmarks).into('bookmarks'));
 
     // ------- Test 1
-    it('GET /bookmarks should expect 200', () => {
+    it('GET /api/bookmarks should expect 200', () => {
       return supertest(app)
         .get('/api/bookmarks')
         .expect(200, testBookmarks);
     });
     // ------- Test 2
-    it('GET /bookmarks/:id should expect 200', () => {
+    it('GET /api/bookmarks/:id should expect 200', () => {
       const id = 2;
-      const testBookmark = testBookmarks[id-1];
+      const bookmark = testBookmarks[id-1];
       return supertest(app)
         .get(`/api/bookmarks/${id}`)
-        .expect(200, testBookmark);
+        .expect(200, bookmark);
     });
     // ------- Test 3
-    it('DELETE /bookmarks/:id should expect 204', () => {
+    it('DELETE /api/bookmarks/:id should expect 204', () => {
       const id = 1;
       const expectedList = testBookmarks.filter(b => b.id !== id);
       return supertest(app)
@@ -51,11 +51,11 @@ describe('App', () => {
         .expect(204)
         .then(res => 
           supertest(app)
-            .get('/bookmarks')
+            .get('/api/bookmarks')
             .expect(expectedList));
     });
     // ------- Test 4
-    it.only('PATCH /bookmarks/:id should expect 204', () => {
+    it('PATCH /api/bookmarks/:id should expect 204', () => {
       const id = 1;
       const updateBookmark = {
         id,
@@ -79,13 +79,13 @@ describe('App', () => {
 
   context('Given db has no data', () => {
     // ------- Test 4
-    it('GET /bookmarks should expect empty []', () => {
+    it('GET /api/bookmarks should expect empty []', () => {
       return supertest(app)
-        .get('/bookmarks')
+        .get('/api/bookmarks')
         .expect(200, []);
     });
     // ------- Test 5
-    it('POST /bookmarks should expect 201', () => {
+    it('POST /api/bookmarks should expect 201', () => {
       const newBookmark = {
         title: 'Amazon',
         url: 'https://www.amazon.com',
@@ -93,7 +93,7 @@ describe('App', () => {
         rating: '2'
       };
       return supertest(app)
-        .post('/bookmarks')
+        .post('/api/bookmarks')
         .send(newBookmark)
         .expect(201)
         .expect(res => {
@@ -103,7 +103,7 @@ describe('App', () => {
           expect(res.body.description).to.eql(newBookmark.description);
           expect(res.body.rating).to.eql(newBookmark.rating);
           expect(res.body).to.have.property('id');
-          expect(res.headers.location).to.eql(`/bookmarks/${res.body.id}`);
+          expect(res.headers.location).to.eql(`/api/bookmarks/${res.body.id}`);
 
           return db('bookmarks')
             .select('*')
@@ -113,15 +113,15 @@ describe('App', () => {
         })
         .then(posted => 
           supertest(app)
-            .get(`/bookmarks/${posted.body.id}`)
+            .get(`/api/bookmarks/${posted.body.id}`)
             .expect(posted.body));
     });
 
 
     // ------- Test 6
-    it('POST /bookmarks responds with 400 when empty', () => {
+    it('POST /api/bookmarks responds with 400 when empty', () => {
       return supertest(app)
-        .post('/bookmarks')
+        .post('/api/bookmarks')
         .send({title: 'Test Title'})
         .expect(
           400, 

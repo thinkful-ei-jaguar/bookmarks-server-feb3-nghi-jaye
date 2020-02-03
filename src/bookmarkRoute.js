@@ -9,7 +9,7 @@ bookmarkRouter
   .route('/')
   .get((req, res) => {
     BookmarkService
-      .getBookmarks(req.app.get('db'))
+      .getBookmark(req.app.get('db'))
       .then(bookmarks => res.json(bookmarks));
   })
   .post((req, res, next) => {
@@ -34,7 +34,7 @@ bookmarkRouter
       .then(newlyAdded => 
         res
           .status(201)
-          .location(`/bookmarks/${newlyAdded.id}`)
+          .location(`/api/bookmarks/${newlyAdded.id}`)
           .json(newlyAdded))
       .catch(next);
   });
