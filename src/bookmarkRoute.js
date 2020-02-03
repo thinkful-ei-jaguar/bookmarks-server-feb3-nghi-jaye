@@ -18,8 +18,8 @@ bookmarkRouter
     if( !title || !url || !rating ) {
       logger.error('Title, Url and Rating are required');
       return res
-      .status(400)
-      .json({error: {message: 'Title, Url and Rating are required'}});
+        .status(400)
+        .json({error: {message: 'Title, Url and Rating are required'}});
     }
   
     const newBookmark = {
@@ -33,9 +33,9 @@ bookmarkRouter
       .addBookmark(res.app.get('db'), newBookmark)
       .then(newlyAdded => 
         res
-        .status(201)
-        .location(`/bookmarks/${newlyAdded.id}`)
-        .json(newlyAdded))
+          .status(201)
+          .location(`/bookmarks/${newlyAdded.id}`)
+          .json(newlyAdded))
       .catch(next);
   });
 
@@ -66,7 +66,7 @@ bookmarkRouter
     if(numberOfValues === 0) {
       return res.status(400).json({
         error: {
-          message: `Request body must contain title, url, description, or rating`
+          message: 'Request body must contain title, url, description, or rating'
         }
       });
     }
@@ -79,4 +79,4 @@ bookmarkRouter
       .then(() => res.status(204).end());
   });
 
-  module.exports = bookmarkRouter;
+module.exports = bookmarkRouter;

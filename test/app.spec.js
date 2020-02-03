@@ -31,7 +31,7 @@ describe('App', () => {
     // ------- Test 1
     it('GET /bookmarks should expect 200', () => {
       return supertest(app)
-        .get('/bookmarks')
+        .get('/api/bookmarks')
         .expect(200, testBookmarks);
     });
     // ------- Test 2
@@ -39,40 +39,40 @@ describe('App', () => {
       const id = 2;
       const testBookmark = testBookmarks[id-1];
       return supertest(app)
-        .get(`/bookmarks/${id}`)
+        .get(`/api/bookmarks/${id}`)
         .expect(200, testBookmark);
     });
     // ------- Test 3
     it('DELETE /bookmarks/:id should expect 204', () => {
       const id = 1;
-      const expectedList = testBookmarks.filter(b => b.id != id);
+      const expectedList = testBookmarks.filter(b => b.id !== id);
       return supertest(app)
-        .delete(`/bookmarks/${id}`)
+        .delete(`/api/bookmarks/${id}`)
         .expect(204)
         .then(res => 
           supertest(app)
-          .get('/bookmarks')
-          .expect(expectedList));
+            .get('/bookmarks')
+            .expect(expectedList));
     });
     // ------- Test 4
     it.only('PATCH /bookmarks/:id should expect 204', () => {
       const id = 1;
       const updateBookmark = {
         id,
-        title: "Test",
-        url: "https://www.thinkful.com",
-        description: "Think outside the classroom",
-        rating: "2"
+        title: 'Test',
+        url: 'https://www.thinkful.com',
+        description: 'Think outside the classroom',
+        rating: '2'
       };
 
       return supertest(app)
-        .patch(`/bookmarks/${id}`)
+        .patch(`/api/bookmarks/${id}`)
         .send(updateBookmark)
         .expect(204)
         .then(res =>
-            supertest(app)
-              .get(`/bookmarks/${id}`)
-              .expect(updateBookmark));
+          supertest(app)
+            .get(`/api/bookmarks/${id}`)
+            .expect(updateBookmark));
     });
   }); 
 
@@ -113,8 +113,8 @@ describe('App', () => {
         })
         .then(posted => 
           supertest(app)
-          .get(`/bookmarks/${posted.body.id}`)
-          .expect(posted.body));
+            .get(`/bookmarks/${posted.body.id}`)
+            .expect(posted.body));
     });
 
 

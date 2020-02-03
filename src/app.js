@@ -27,7 +27,7 @@ app.use(express.json());
 
 
 // Routes
-app.use('/bookmarks', bookmarkRouter);
+app.use('/api/bookmarks', bookmarkRouter);
 
 
 
