@@ -54,6 +54,26 @@ describe('App', () => {
           .get('/bookmarks')
           .expect(expectedList));
     });
+    // ------- Test 4
+    it.only('PATCH /bookmarks/:id should expect 204', () => {
+      const id = 1;
+      const updateBookmark = {
+        id,
+        title: "Test",
+        url: "https://www.thinkful.com",
+        description: "Think outside the classroom",
+        rating: "2"
+      };
+
+      return supertest(app)
+        .patch(`/bookmarks/${id}`)
+        .send(updateBookmark)
+        .expect(204)
+        .then(res =>
+            supertest(app)
+              .get(`/bookmarks/${id}`)
+              .expect(updateBookmark));
+    });
   }); 
 
 

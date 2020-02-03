@@ -57,6 +57,26 @@ bookmarkRouter
 
   
     logger.info(`List with id ${id} deleted.`);
+  })
+  .patch((req,res,next) => {
+    const {title, url, description, rating} = req.body;
+    const updatedBookmark = {title, url, description, rating};
+
+    const numberOfValues = Object.values(updatedBookmark).filter(Boolean).length;
+    if(numberOfValues === 0) {
+      return res.status(400).json({
+        error: {
+          message: `Request body must contain title, url, description, or rating`
+        }
+      });
+    }
+
+    BookmarkService
+      .updateBookmark(
+        req.app.get('db'), 
+        req.params.id,
+        updatedBookmark)
+      .then(() => res.status(204).end());
   });
 
   module.exports = bookmarkRouter;
